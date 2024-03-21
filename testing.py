@@ -1,2 +1,2 @@
-lis = range(5)
-print(lis)
+d={'a':'apple','b':'ball'}
+print(d["a"])
