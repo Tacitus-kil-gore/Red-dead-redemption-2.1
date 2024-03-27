@@ -2,7 +2,7 @@
 import random
 
 #starting variables and constants:
-inventory = ["cattleman revolver", "hunting knife"]
+
 towns = {"Valentine." : ["""
     A rough, raucous, hard-working town that provides livestock at auction to Heartlands landowners,
     and rest and refreshment to thirsty cowboys.
@@ -29,26 +29,36 @@ towns = {"Valentine." : ["""
     Explore the open road of America. 
     From the Grizzly mountains of Ambarino to the southern plantations of Lemoyne
     """]}
-
+tuberculosis_stage = 0
+Arthur_morgan_hp = 150 - (tuberculosis_stage * 10)
+print(Arthur_morgan_hp)
 towns_num = list(range(len(towns)))
 missions_completed = 0
 #costant variables:
 YEAR = 1899
 STARTING_TOWN = list(towns.keys())[1]
 
-# text vairiables. These vairables will be used to describe the setting and the missions
 
-missions_+_enemy= {"""
+
+# text vairiables. These vairables will be used to describe the setting and the missions
+#missions_t stands for missions text
+missions_t = ["""
 You find dutch waiting for you in the saloon. He sits you down and takes a drink from his whiskey. 
-"arthur you have got to have faith in me we just need 5000 more dollars and we can escape to tahiti." says dutch
+"arthur you've got to have faith in me we just need 5000 more dollars and we can escape to tahiti." says dutch
 "yeah i know" you replied.  "I've found another job robbing leviticus cornwall, that rich fella we robbed last week in Blackwater." dutch says
 "awww no dutch not this again, leviticus cornwall has already sent that pinkerton detective agency after us, we dont need more trouble" you say.
 "arthr your losing faith, you need to hav-BANG" 
 "DUTCH VANDERLINDE COME OUTSIDE RIGHT NOW WITH YOUR HANDS UP THIS IS THE PINKERTON DETECTIVE AGENCY" you hear from outside the saloon.
 "oh shoot the pinkertons are here" dutch says. dutch runs out the back door and you jump through the window to your left out into an alley.
 you find a pinkerton in the alley with his hand on his gunholster staring at you.
-""" : [1, ] }
+""", "insert strawwberry mission", "insert saint denis mission", "insert rhoades mission", "insert annesburg mission"]
 
+#entity variables These variables will store the stats of entities
+
+cattleman_revolver = {"dmg" : 20, "reload_speed": 1, "aim difficulty" : 3}
+springfield_rifle = {"dmg" : 100, "reload_speed" : 5 "aim difficulty" : 1}
+
+inventory = [cattleman revolver, hunting knife]
 
 #functions:
 # this function plays every time the player leaves a town, or starts the game, this acts as the main menu
@@ -91,9 +101,9 @@ def entertown():
    return inpt, inpm
 
 def missions(t, m):
+    print()
 
-
-#main routine
+#main routine 
 while True:
 
     #here the equivalent of the starting "cutscene" will play
