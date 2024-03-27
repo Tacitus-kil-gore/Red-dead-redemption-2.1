@@ -27,7 +27,7 @@ towns = {"Valentine." : ["""
     mining operations which have been running for almost a century
     """], "Open road." : ["""
     Explore the open road of America. 
-    From the Grizzly mountains of Ambarino to the southern Plantations of Lemoyne
+    From the Grizzly mountains of Ambarino to the southern plantations of Lemoyne
     """]}
 
 towns_num = list(range(len(towns)))
@@ -38,11 +38,21 @@ STARTING_TOWN = list(towns.keys())[1]
 
 # text vairiables. These vairables will be used to describe the setting and the missions
 
+missions_+_enemy= {"""
+You find dutch waiting for you in the saloon. He sits you down and takes a drink from his whiskey. 
+"arthur you have got to have faith in me we just need 5000 more dollars and we can escape to tahiti." says dutch
+"yeah i know" you replied.  "I've found another job robbing leviticus cornwall, that rich fella we robbed last week in Blackwater." dutch says
+"awww no dutch not this again, leviticus cornwall has already sent that pinkerton detective agency after us, we dont need more trouble" you say.
+"arthr your losing faith, you need to hav-BANG" 
+"DUTCH VANDERLINDE COME OUTSIDE RIGHT NOW WITH YOUR HANDS UP THIS IS THE PINKERTON DETECTIVE AGENCY" you hear from outside the saloon.
+"oh shoot the pinkertons are here" dutch says. dutch runs out the back door and you jump through the window to your left out into an alley.
+you find a pinkerton in the alley with his hand on his gunholster staring at you.
+""" : [1, ] }
 
 
 #functions:
-# this function plays every time the player leaves a town, this acts as the main menu
-def entertown(f):
+# this function plays every time the player leaves a town, or starts the game, this acts as the main menu
+def entertown():
    while True:
        try:
             inpt = int(input("""
@@ -69,6 +79,10 @@ def entertown(f):
            1: go left and meet dutch (this will start the mission)
            2: explore the town
            type answer here: """))
+
+           if input not in list(range(1, 3)):
+               print(towns[6]) #generates error
+
        except:
             print("value must be an integer between 1 and 2")
        else:
@@ -76,6 +90,21 @@ def entertown(f):
 
    return inpt, inpm
 
+def missions(t, m):
+
 
 #main routine
-entertown(1)
+while True:
+
+    #here the equivalent of the starting "cutscene" will play
+
+    town_selection = entertown()
+    tc = town_selection[0] #stands for town choice
+    mve = town_selection[1] #variable stores the users choice of starting the mission or exploring the town. Mission Vs Explore hence the name, mve
+    if mve == 1:
+        print("n")
+    elif mve == 2:
+        print("g")
+    else:
+        print("something went wrong, game is restarting")
+        continue
