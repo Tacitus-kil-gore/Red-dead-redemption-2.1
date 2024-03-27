@@ -1,6 +1,6 @@
 #imports:
 import random
-import inputimeout
+import time
 #starting variables and constants:
 
 towns = {"Valentine." : ["""
@@ -118,9 +118,31 @@ def entertown():
 #this function will be where arthur fights enemies.
 def combat(e):
     print("Enemy:", e)
-    print("Your inventory: ", inventory)
-    weapon = input("what weapon do you want to use?")
+    #for loop which will iterate through inventory list and print every item and its stats
+    print("Your Inventory:")
+    for c, i in enumerate(inventory):
+        print(inventory[c], ": ", items[i], "Type", c, "to select this weapon")
+    #asks the user to select a weapon for the upcoming battle
+    while True:
+        try:
+            weapon = inventory[int(input("What weapon do you want to use?"))]
+            print("You have selected: ", weapon)
+        except:
+            print("please type an integer that corresponds to a weapon in your inventory")
+        else:
+            break
 
+    print("battle starting in 3")
+    time.sleep(1)
+    print("battle starting in 2")
+    time.sleep(1)
+    print("battle starting in 1")
+    time.sleep(1)
+    print("GO")
+
+    #battle sequence will start, a random number will be chosen and the user will have to press that number on their
+    #keyboard fast enough in order to fire, simulating quickdraw.
+    battle_num = random.randint(0, 9)
 
 
 
