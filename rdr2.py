@@ -1,6 +1,6 @@
 #imports:
 import random
-
+import inputimeout
 #starting variables and constants:
 
 towns = {"Valentine." : ["""
@@ -31,7 +31,6 @@ towns = {"Valentine." : ["""
     """]}
 tuberculosis_stage = 0
 Arthur_morgan_hp = 150 - (tuberculosis_stage * 10)
-print(Arthur_morgan_hp)
 towns_num = list(range(len(towns)))
 missions_completed = 0
 #costant variables:
@@ -41,8 +40,8 @@ STARTING_TOWN = list(towns.keys())[1]
 
 
 # text vairiables. These vairables will be used to describe the setting and the missions
-#missions_t stands for missions text
-missions_t = ["""
+#missions_t stands for missions text and this hash will store the enemies for each mission.
+missions_t = {"""
 You find dutch waiting for you in the saloon. He sits you down and takes a drink from his whiskey. 
 "arthur you've got to have faith in me we just need 5000 more dollars and we can escape to tahiti." says dutch
 "yeah i know" you replied.  "I've found another job robbing leviticus cornwall, that rich fella we robbed last week in Blackwater." dutch says
@@ -51,14 +50,23 @@ You find dutch waiting for you in the saloon. He sits you down and takes a drink
 "DUTCH VANDERLINDE COME OUTSIDE RIGHT NOW WITH YOUR HANDS UP THIS IS THE PINKERTON DETECTIVE AGENCY" you hear from outside the saloon.
 "oh shoot the pinkertons are here" dutch says. dutch runs out the back door and you jump through the window to your left out into an alley.
 you find a pinkerton in the alley with his hand on his gunholster staring at you.
-""", "insert strawwberry mission", "insert saint denis mission", "insert rhoades mission", "insert annesburg mission"]
+""" : 0, "insert strawwberry mission" : 1, "insert saint denis mission" : 0, "insert rhoades mission" : 2, "insert annesburg mission" : 3}
 
 #entity variables These variables will store the stats of entities
 
-cattleman_revolver = {"dmg" : 20, "reload_speed": 1, "aim difficulty" : 3}
-springfield_rifle = {"dmg" : 100, "reload_speed" : 5 "aim difficulty" : 1}
+items = {
+"cattleman_revolver" : {"dmg" : 10, "reload speed": 1, "aim time" : 3},
+"springfield_rifle" : {"dmg" : 100, "reload speed" : 5, "aim time" : 1},
+"m1911" : {"dmg" : 40, "reload speed" : 1, "aim time": 3}
+}
 
-inventory = [cattleman revolver, hunting knife]
+enemies ={
+"pinkerton" : {"hp" : 100, "dmg" : 20},
+"lawman" : {"hp" : 100, "dmg" : 40},
+"braithwaite" : {"hp" : 100, "dmg" : 50},
+"micah" : {"hp" : 200, "dmg": 90}}
+
+inventory = ["cattleman_revolver"]
 
 #functions:
 # this function plays every time the player leaves a town, or starts the game, this acts as the main menu
@@ -80,28 +88,46 @@ def entertown():
             print("value must be an integer between 0 and 5")
        else:
             break
+   if inpt < 5:
+       print("Welcome to", list(towns.keys())[inpt], towns[list(towns.keys())[inpt]][0] , "You walk into the center of the town.")
+       while True:
+           try:
+               inpm = int(input("""
+               The place where Dutch waiting for you is down the road the left, where do you go:
+               1: go left and meet dutch (this will start the mission)
+               2: explore the town
+               type answer here: """))
 
-   print("Welcome to", list(towns.keys())[inpt], towns[list(towns.keys())[inpt]][0] , "You walk into the center of the town.")
-   while True:
-       try:
-           inpm = int(input("""
-           The place where Dutch waiting for you is down the road the left, where do you go:
-           1: go left and meet dutch (this will start the mission)
-           2: explore the town
-           type answer here: """))
+               if inpm not in list(range(1, 3)):
+                   print("chung")
+                   print(towns[6]) #generates error
 
-           if input not in list(range(1, 3)):
-               print(towns[6]) #generates error
-
-       except:
-            print("value must be an integer between 1 and 2")
-       else:
-            break
+           except:
+                print("chug")
+                print("value must be an integer between 1 and 2")
+           else:
+                break
+   else:
+       #insert content about exploring the world
+       print("")
 
    return inpt, inpm
 
-def missions(t, m):
-    print()
+
+
+#this function will be where arthur fights enemies.
+def combat(e):
+    print("Enemy:", e)
+    print("Your inventory: ", inventory)
+    weapon = input("what weapon do you want to use?")
+
+
+
+
+#this function will start the missions
+def missions(t):
+    print(list(missions_t.keys())[t])
+    combat(list(enemies.keys())[list(missions_t.values())[0]])
 
 #main routine 
 while True:
@@ -112,9 +138,10 @@ while True:
     tc = town_selection[0] #stands for town choice
     mve = town_selection[1] #variable stores the users choice of starting the mission or exploring the town. Mission Vs Explore hence the name, mve
     if mve == 1:
-        print("n")
+        missions(tc)
     elif mve == 2:
         print("g")
     else:
         print("something went wrong, game is restarting")
         continue
+
