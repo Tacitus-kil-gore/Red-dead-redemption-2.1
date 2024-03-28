@@ -1,6 +1,7 @@
 #imports:
 import random
 import time
+from threading import Timer
 #starting variables and constants:
 
 towns = {"Valentine." : ["""
@@ -144,7 +145,12 @@ def combat(e):
     #keyboard fast enough in order to fire, simulating quickdraw.
     battle_num = random.randint(0, 9)
 
-
+    timeout = items[weapon[0]]
+    t = Timer(timeout, print, ["Times Up, he shot you"])
+    t.start()
+    prompt = "PRESS THE BUTTON %d ON YOUR KEYBOARD \n" % battle_num
+    answer = input(prompt)
+    t.cancel()
 
 #this function will start the missions
 def missions(t):
