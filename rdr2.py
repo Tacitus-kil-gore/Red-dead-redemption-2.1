@@ -5,33 +5,33 @@ from threading import Timer
 #starting variables and constants:
 
 towns = {"Valentine." : ["""
-    A rough, raucous, hard-working town that provides livestock at auction to Heartlands landowners,
-    and rest and refreshment to thirsty cowboys.
-    It's nicknamed 'Mudtown' because the streets, buildings, and most of the residents are rarely clean.
+A rough, raucous, hard-working town that provides livestock at auction to Heartlands landowners,
+and rest and refreshment to thirsty cowboys.It's nicknamed 'Mudtown' because the streets, 
+buildings, and most of the residents are rarely clean.
     """], "Strawberry." : ["""
-    Until recently, this mountain town was little more than a base camp for lumberjacks and hunters,
-    but more settlers and visitors have arrived as the local logging industry continues to grow.
-    A small, isolated community of honest working folk.
+Until recently, this mountain town was little more than a base camp for lumberjacks and hunters,
+but more settlers and visitors have arrived as the local logging industry continues to grow.
+A small, isolated community of honest working folk.
     """], "Saint Denis." : ["""
-    A lively, 200-year-old melting-pot city where industry magnates,
-    socialites, traders, sailors, workers, beggars, and thieves all live side by side.
-    With good rail, road, and river connections for sugar, cotton, and other commodities trading,
-    and a new electric power plant, business is booming.
+A lively, 200-year-old melting-pot city where industry magnates,
+socialites, traders, sailors, workers, beggars, and thieves all live side by side.
+With good rail, road, and river connections for sugar, cotton, and other commodities trading,
+and a new electric power plant, business is booming.
     """], "Rhoades." : ["""
-    A prim and proper Southern town on the surface,
-    but many residents can't forget the Civil War or the town's pre-war glory days,
-    where the horrific oppression of the slave trade made white landowners rich.
-    Racial tensions, corruption, and old family feuds run deep.
+A prim and proper Southern town on the surface,
+but many residents can't forget the Civil War or the town's pre-war glory days,
+where the horrific oppression of the slave trade made white landowners rich.
+Racial tensions, corruption, and old family feuds run deep.
     """], "Annesburg." : ["""
-    A mining town established by German settlers who discovered the rich coal seams in the surrounding hills.
-    The surrounding countryside and waterways are sooty and polluted from the
-    mining operations which have been running for almost a century
+A mining town established by German settlers who discovered the rich coal seams in the surrounding hills.
+The surrounding countryside and waterways are sooty and polluted from the
+mining operations which have been running for almost a century
     """], "Open road." : ["""
-    Explore the open road of America. 
-    From the Grizzly mountains of Ambarino to the southern plantations of Lemoyne
+Explore the open road of America. 
+From the Grizzly mountains of Ambarino to the southern plantations of Lemoyne
     """]}
 tuberculosis_stage = 0
-Arthur_morgan_hp = 150 - (tuberculosis_stage * 10)
+Arthur_morgan_hp = 160 - (tuberculosis_stage * 10)
 towns_num = list(range(len(towns)))
 missions_completed = 0
 #costant variables:
@@ -45,7 +45,7 @@ STARTING_TOWN = list(towns.keys())[1]
 missions_t = {"""
 You find dutch waiting for you in the saloon. He sits you down and takes a drink from his whiskey. 
 "arthur you've got to have faith in me we just need 5000 more dollars and we can escape to tahiti." says dutch
-"yeah i know" you replied.  "I've found another job robbing leviticus cornwall, that rich fella we robbed last week in Blackwater." dutch says
+"yeah i know" you replied.  "I've found another job robbing leviticus cornwall, that rich fella we robbed a couple months back in Blackwater." dutch says.
 "awww no dutch not this again, leviticus cornwall has already sent that pinkerton detective agency after us, we dont need more trouble" you say.
 "arthr your losing faith, you need to hav-BANG" 
 "DUTCH VANDERLINDE COME OUTSIDE RIGHT NOW WITH YOUR HANDS UP THIS IS THE PINKERTON DETECTIVE AGENCY" you hear from outside the saloon.
@@ -55,16 +55,16 @@ you find a pinkerton in the alley with his hand on his gunholster staring at you
 
 #entity variables These variables will store the stats of entities
 
-items = {
-"cattleman_revolver" : {"dmg" : 10, "reload speed": 1, "aim time" : 3},
+ITEMS = {
+"cattleman_revolver" : {"dmg" : 20, "reload speed": 1, "aim time" : 3},
 "springfield_rifle" : {"dmg" : 100, "reload speed" : 5, "aim time" : 1},
 "m1911" : {"dmg" : 40, "reload speed" : 1, "aim time": 3}
 }
 
-enemies ={
-"pinkerton" : {"hp" : 100, "dmg" : 20},
-"lawman" : {"hp" : 100, "dmg" : 40},
-"braithwaite" : {"hp" : 100, "dmg" : 50},
+ENEMIES ={
+"the pinkerton" : {"hp" : 100, "dmg" : 20},
+"the lawman" : {"hp" : 100, "dmg" : 40},
+"the braithwaite" : {"hp" : 100, "dmg" : 50},
 "micah" : {"hp" : 200, "dmg": 90}}
 
 inventory = ["cattleman_revolver"]
@@ -118,44 +118,75 @@ def entertown():
 
 #this function will be where arthur fights enemies.
 def combat(e):
-    print("Enemy:", e)
-    #for loop which will iterate through inventory list and print every item and its stats
-    print("Your Inventory:")
-    for c, i in enumerate(inventory):
-        print(inventory[c], ": ", items[i], "Type", c, "to select this weapon")
-    #asks the user to select a weapon for the upcoming battle
-    while True:
-        try:
-            weapon = inventory[int(input("What weapon do you want to use?"))]
-            print("You have selected: ", weapon)
-        except:
-            print("please type an integer that corresponds to a weapon in your inventory")
-        else:
+    hp = Arthur_morgan_hp #stands for health points
+    ehp = ENEMIES[e]["hp"] #stands for enemy health points
+
+
+    #this loop is the battle loop, this will repeat until either the player's or the enemy's hp is reduced to 0
+    while hp > 0 or ehp > 0:
+        hp -= ENEMIES[e]["dmg"]
+        print("You have ", hp, "health")
+        print("Enemy:", e)
+        #for loop which will iterate through inventory list and print every item and its stats
+        print("Your Inventory:")
+        for c, i in enumerate(inventory):
+            print(inventory[c], ": ", ITEMS[i], "Type", c, "to select this weapon")
+        #asks the user to select a weapon for the upcoming battle
+        while True:
+            try:
+                weapon = inventory[int(input("What weapon do you want to use?"))]
+                print("You have selected: ", weapon)
+            except:
+                print("please type an integer that corresponds to a weapon in your inventory")
+            else:
+                break
+
+        #this loop protects against errors
+        while True:
+            try:
+                print("battle starting in 3")
+                time.sleep(1)
+                print("battle starting in 2")
+                time.sleep(1)
+                print("battle starting in 1")
+                time.sleep(1)
+                print("GO")
+
+                #battle sequence will start, a random number will be chosen and the user will have to press that number on their
+                #keyboard fast enough in order to fire, simulating quickdraw.
+                battle_num = random.randint(0, 9)
+                battle_string = "PRESS THE BUTTON " + str(battle_num) + " ON YOUR KEYBOARD WITHIN %d SECONDS TO FIRE \n"
+                timeout = ITEMS[weapon]["aim time"]
+                t = Timer(timeout, print, ["Times Up, you got hit, press enter to reload the gun and fire again"])
+                t.start()
+                prompt = battle_string % timeout
+                answer = int(input(prompt))
+                t.cancel()
+
+                if answer == battle_num:
+                    print("You hit the enemy for", ITEMS[weapon]["dmg"], "damage")
+                    ehp -= ITEMS[weapon]["dmg"]
+                    print(e, " now has ", ehp, " health left")
+                else:
+                    print("You missed the enemy")
+                    print("They hit you for", ENEMIES[e]["dmg"], "damage")
+                    hp -= ENEMIES[e]["dmg"]
+                    print("You now have ", hp, "health left")
+            except:
+                print("please enter an integer")
+            else:
+                break
+
+        if hp <= 0:
+            print("You died, the game will now restart")
             break
-
-    print("battle starting in 3")
-    time.sleep(1)
-    print("battle starting in 2")
-    time.sleep(1)
-    print("battle starting in 1")
-    time.sleep(1)
-    print("GO")
-
-    #battle sequence will start, a random number will be chosen and the user will have to press that number on their
-    #keyboard fast enough in order to fire, simulating quickdraw.
-    battle_num = random.randint(0, 9)
-
-    timeout = items[weapon[0]]
-    t = Timer(timeout, print, ["Times Up, he shot you"])
-    t.start()
-    prompt = "PRESS THE BUTTON %d ON YOUR KEYBOARD \n" % battle_num
-    answer = input(prompt)
-    t.cancel()
+        elif ehp <= 0:
+            print("You defeated ", ENEMIES[e])
 
 #this function will start the missions
 def missions(t):
     print(list(missions_t.keys())[t])
-    combat(list(enemies.keys())[list(missions_t.values())[0]])
+    combat(list(ENEMIES.keys())[list(missions_t.values())[0]])
 
 #main routine 
 while True:
@@ -169,7 +200,4 @@ while True:
         missions(tc)
     elif mve == 2:
         print("g")
-    else:
-        print("something went wrong, game is restarting")
-        continue
 
