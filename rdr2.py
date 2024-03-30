@@ -31,7 +31,7 @@ Explore the open road of America.
 From the Grizzly mountains of Ambarino to the southern plantations of Lemoyne
     """]}
 tuberculosis_stage = 0
-Arthur_morgan_hp = 160 - (tuberculosis_stage * 10)
+Arthur_morgan_hp = 150 - (tuberculosis_stage * 10)
 towns_num = list(range(len(towns)))
 missions_completed = 0
 #costant variables:
@@ -53,19 +53,22 @@ You find dutch waiting for you in the saloon. He sits you down and takes a drink
 you find a pinkerton in the alley with his hand on his gunholster staring at you.
 """ : 0, "insert strawwberry mission" : 1, "insert saint denis mission" : 0, "insert rhoades mission" : 2, "insert annesburg mission" : 3}
 
-#entity variables These variables will store the stats of entities
 
+#thesem are all of the items in the game, dmg stands for the damage they do, reload speed is
+#the time it takes to reload and aim time is how easy it is to aim, higher is easier.
 ITEMS = {
 "cattleman_revolver" : {"dmg" : 20, "reload speed": 1, "aim time" : 3},
 "springfield_rifle" : {"dmg" : 100, "reload speed" : 5, "aim time" : 1},
 "m1911" : {"dmg" : 40, "reload speed" : 1, "aim time": 3}
 }
 
+#dictionary for the enemies, hp is the amount of health points they have, dmg is the
+#amount of damage they do per hit and aim skill is the chance out of 10 of hitting you
 ENEMIES ={
-"the pinkerton" : {"hp" : 100, "dmg" : 20},
-"the lawman" : {"hp" : 100, "dmg" : 40},
-"the braithwaite" : {"hp" : 100, "dmg" : 50},
-"micah" : {"hp" : 200, "dmg": 90}}
+"the pinkerton" : {"hp" : 100, "dmg" : 20, "aim skill" : 4},
+"the lawman" : {"hp" : 100, "dmg" : 30, "aim skill" : 6},
+"the braithwaite" : {"hp" : 100, "dmg" : 20, "aim skill" : 7},
+"micah" : {"hp" : 200, "dmg": 70, "aim skill" : 9}}
 
 inventory = ["cattleman_revolver"]
 
@@ -124,7 +127,7 @@ def combat(e):
 
     #this loop is the battle loop, this will repeat until either the player's or the enemy's hp is reduced to 0
     while hp > 0 or ehp > 0:
-        hp -= ENEMIES[e]["dmg"]
+
         print("You have ", hp, "health")
         print("Enemy:", e)
         #for loop which will iterate through inventory list and print every item and its stats
@@ -134,54 +137,87 @@ def combat(e):
         #asks the user to select a weapon for the upcoming battle
         while True:
             try:
-                weapon = inventory[int(input("What weapon do you want to use?"))]
+                weapon = inventory[int(input("What weapon do you want to use? "))]
                 print("You have selected: ", weapon)
             except:
                 print("please type an integer that corresponds to a weapon in your inventory")
             else:
                 break
 
-        #this loop protects against errors
+
+
+        print("battle starting in 3")
+        time.sleep(1)
+        print("battle starting in 2")
+        time.sleep(1)
+        print("battle starting in 1")
+        time.sleep(1)
+        print("GO")
+
+
+        #battle sequence will start, a random number will be chosen and the user will have to press that number on their
+        #keyboard fast enough in order to fire, simulating quickdraw.
+        battle_num = random.randint(0, 9)
+        battle_string = "PRESS THE BUTTON " + str(battle_num) + " ON YOUR KEYBOARD WITHIN %d SECONDS TO FIRE \n"
+        timeout = ITEMS[weapon]["aim time"]
+        t = Timer(timeout, print, ["Times Up, you got hit, press enter to reload the gun and fire again"])
+        t.start()
+        prompt = battle_string % timeout
+        answer = input(prompt)
+        t.cancel()
+
+        # tests to see if the player entered a value, and if so the value was correct.
         while True:
             try:
-                print("battle starting in 3")
-                time.sleep(1)
-                print("battle starting in 2")
-                time.sleep(1)
-                print("battle starting in 1")
-                time.sleep(1)
-                print("GO")
-
-                #battle sequence will start, a random number will be chosen and the user will have to press that number on their
-                #keyboard fast enough in order to fire, simulating quickdraw.
-                battle_num = random.randint(0, 9)
-                battle_string = "PRESS THE BUTTON " + str(battle_num) + " ON YOUR KEYBOARD WITHIN %d SECONDS TO FIRE \n"
-                timeout = ITEMS[weapon]["aim time"]
-                t = Timer(timeout, print, ["Times Up, you got hit, press enter to reload the gun and fire again"])
-                t.start()
-                prompt = battle_string % timeout
-                answer = int(input(prompt))
-                t.cancel()
-
-                if answer == battle_num:
+                if answer == '':
+                    player_inputted = False
+                elif int(answer) == battle_num:
+                    player_inputted = True
                     print("You hit the enemy for", ITEMS[weapon]["dmg"], "damage")
                     ehp -= ITEMS[weapon]["dmg"]
                     print(e, " now has ", ehp, " health left")
                 else:
+                    player_inputted = True
                     print("You missed the enemy")
                     print("They hit you for", ENEMIES[e]["dmg"], "damage")
                     hp -= ENEMIES[e]["dmg"]
                     print("You now have ", hp, "health left")
             except:
-                print("please enter an integer")
+                print("Please enter an integer")
             else:
                 break
 
+        #checks whether player has won or lost the round
         if hp <= 0:
             print("You died, the game will now restart")
             break
         elif ehp <= 0:
-            print("You defeated ", ENEMIES[e])
+            print("You defeated ", e)
+            break
+        else:
+            # reloading mechanic, the reload speed of the weapon will affect the amount of chances that the
+            # enemy has to hit the player.
+            print("reloading...")
+            time.sleep(ITEMS[weapon]["reload speed"])
+            if player_inputted == False:
+                hp -= ENEMIES[e]["dmg"]
+                print(e, "hit you for", ENEMIES[e]["dmg"], "damage while you were reloading")
+            else:
+                damage_taken = 0
+                for i in range(0, ITEMS[weapon]["reload speed"]):
+                    if random.randint(1, 10) <= ENEMIES[e]["aim skill"]:
+                        damage_taken += ENEMIES[e]["dmg"]
+                hp -= damage_taken
+                print("You took ", damage_taken, "damage while reloading")
+
+
+
+
+
+
+
+
+
 
 #this function will start the missions
 def missions(t):
