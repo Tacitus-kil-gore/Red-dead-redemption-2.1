@@ -1,3 +1,6 @@
-import random
+test  = 42
 
-print(random.randint(0, 1))
+def func(e):
+    test += 1
+
+func(2)

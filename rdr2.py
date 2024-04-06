@@ -30,9 +30,11 @@ mining operations which have been running for almost a century
 Explore the open road of America. 
 From the Grizzly mountains of Ambarino to the southern plantations of Lemoyne
     """]}
+
 tuberculosis_stage = 0
 Arthur_morgan_hp = 150 - (tuberculosis_stage * 10)
 towns_num = list(range(len(towns)))
+money = 0
 missions_completed = 0
 #costant variables:
 YEAR = 1899
@@ -123,7 +125,7 @@ def entertown():
 def combat(e):
     hp = Arthur_morgan_hp #stands for health points
     ehp = ENEMIES[e]["hp"] #stands for enemy health points
-
+    debug = False
 
     #this loop is the battle loop, this will repeat until either the player's or the enemy's hp is reduced to 0
     while hp > 0 or ehp > 0:
@@ -137,14 +139,22 @@ def combat(e):
         #asks the user to select a weapon for the upcoming battle
         while True:
             try:
-                weapon = inventory[int(input("What weapon do you want to use? "))]
+                player_input = input("What weapon do you want to use? ")
+                weapon = int(list(player_input))
                 print("You have selected: ", weapon)
             except:
-                print("please type an integer that corresponds to a weapon in your inventory")
+                if player_input == "debug":
+                    print("debug mode on")
+                    debug = True
+                    break
+                else:
+                    print("please type an integer that corresponds to a weapon in your inventory")
             else:
                 break
 
-
+        if debug == True:
+            ehp = 0
+            break
 
         print("battle starting in 3")
         time.sleep(1)
@@ -221,8 +231,27 @@ def combat(e):
 
 #this function will start the missions
 def missions(t):
+    global tuberculosis_stage
+    global Arthur_morgan_hp
+    global towns_num
+    global money
+    global missions_completed
+
+
     print(list(missions_t.keys())[t])
     combat(list(ENEMIES.keys())[list(missions_t.values())[0]])
+    print("""
+    
+You escape and make it back to camp,
+finding 100 dollars on the corpse of""", list(ENEMIES.keys())[list(missions_t.values())[0]], """
+as you leave the town. You find a note 
+in your tent where dutch tells 
+you where he is waiting for you in the next town.
+
+    """)
+    money += 100
+    missions_completed += 1
+    tuberculosis_stage += 1
 
 #main routine 
 while True:
