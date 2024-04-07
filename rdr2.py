@@ -4,11 +4,11 @@ import time
 from threading import Timer
 #starting variables and constants:
 
-towns = {"Valentine." : ["""
+towns = {"Valentine" : ["""
 A rough, raucous, hard-working town that provides livestock at auction to Heartlands landowners,
 and rest and refreshment to thirsty cowboys.It's nicknamed 'Mudtown' because the streets, 
 buildings, and most of the residents are rarely clean.
-    """], "Strawberry." : ["""
+    """], "Strawberry" : ["""
 Until recently, this mountain town was little more than a base camp for lumberjacks and hunters,
 but more settlers and visitors have arrived as the local logging industry continues to grow.
 A small, isolated community of honest working folk.
@@ -17,16 +17,16 @@ A lively, 200-year-old melting-pot city where industry magnates,
 socialites, traders, sailors, workers, beggars, and thieves all live side by side.
 With good rail, road, and river connections for sugar, cotton, and other commodities trading,
 and a new electric power plant, business is booming.
-    """], "Rhoades." : ["""
+    """], "Rhoades" : ["""
 A prim and proper Southern town on the surface,
 but many residents can't forget the Civil War or the town's pre-war glory days,
 where the horrific oppression of the slave trade made white landowners rich.
 Racial tensions, corruption, and old family feuds run deep.
-    """], "Annesburg." : ["""
+    """], "Annesburg" : ["""
 A mining town established by German settlers who discovered the rich coal seams in the surrounding hills.
 The surrounding countryside and waterways are sooty and polluted from the
 mining operations which have been running for almost a century
-    """], "Open road." : ["""
+    """], "Open road" : ["""
 Explore the open road of America. 
 From the Grizzly mountains of Ambarino to the southern plantations of Lemoyne
     """]}
@@ -57,11 +57,11 @@ you find a pinkerton in the alley with his hand on his gunholster staring at you
 
 
 #thesem are all of the items in the game, dmg stands for the damage they do, reload speed is
-#the time it takes to reload and aim time is how easy it is to aim, higher is easier.
+#the time it takes to reload, aim time is how easy it is to aim, higher is easier, and price is how much it will cost the player to purchase.
 ITEMS = {
-"cattleman_revolver" : {"dmg" : 20, "reload speed": 1, "aim time" : 3},
-"springfield_rifle" : {"dmg" : 100, "reload speed" : 5, "aim time" : 1},
-"m1911" : {"dmg" : 40, "reload speed" : 1, "aim time": 3}
+"cattleman_revolver" : {"dmg" : 20, "reload speed": 1, "aim time" : 3, "price" : 100},
+"springfield_rifle" : {"dmg" : 100, "reload speed" : 5, "aim time" : 1, "price" : 300 },
+"m1911" : {"dmg" : 40, "reload speed" : 1, "aim time": 3, "price" : 150}
 }
 
 #dictionary for the enemies, hp is the amount of health points they have, dmg is the
@@ -99,9 +99,10 @@ def entertown():
        while True:
            try:
                inpm = int(input("""
-               The place where Dutch waiting for you is down the road the left, where do you go:
+               The place where Dutch waiting for you is down the road the left,
+               and the gunsmith is down the road to the right. Where do you go:
                1: go left and meet dutch (this will start the mission)
-               2: explore the town
+               2: go right and visit the gunsmith
                type answer here: """))
 
                if inpm not in list(range(1, 3)):
@@ -237,8 +238,9 @@ def missions(t):
     global money
     global missions_completed
 
-
+#prints the mission "story" variable
     print(list(missions_t.keys())[t])
+#starts a battle with enemy by calling combat function
     combat(list(ENEMIES.keys())[list(missions_t.values())[0]])
     print("""
     
@@ -253,6 +255,44 @@ you where he is waiting for you in the next town.
     missions_completed += 1
     tuberculosis_stage += 1
 
+#gunsmith function lets player purchase new weapons
+def gunsmith(t):
+    global inventory
+    global money
+    while True:
+
+        print("Welcome to the", t, "firearms smithery. You have", money, "dollars. Here is our catalouge:")
+        #for loop iterates through all items in the game and prints their name, stats, and key that the player had to press to select them.
+        for c, i in enumerate(ITEMS):
+            print(i, ITEMS[i], "press", c, "select this item")
+
+        #loop protects against errors and missclicks
+        while True:
+            try:
+                item_choice = int(input("What item do you want to purchase "))
+                item_choice_name = ITEMS.keys()[item_choice]
+            except:
+                print("please input an integer corresponding to an item in the catalouge")
+                continue
+            double_check = input("are you sure you want to purchase this item, press 0 for no, any other input will count as yes")
+            if double_check == "0":
+                continue
+            else:
+                break
+
+        #checks if player has enough money to purchase item
+        if money - ITEMS[item_choice_name["price"]] < 0:
+            print("you do not have enough money to purchase this item")
+        else:
+            money -= ITEMS[item_choice_name["price"]]
+            inventory.append(item_choice_name)
+
+        leave_gunsmith = input("press 0 to leave the gunsmith, any other input will return you to the catalouge.")
+        if leave_gunsmith == "0":
+            break
+        else:
+            continue
+
 #main routine 
 while True:
 
@@ -264,5 +304,5 @@ while True:
     if mve == 1:
         missions(tc)
     elif mve == 2:
-        print("g")
+        gunsmith(list(towns.keys())[tc])
 
