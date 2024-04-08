@@ -4,37 +4,59 @@ import time
 from threading import Timer
 #starting variables and constants:
 
+
+logo = """
+=%%%%%%%%@@@:*#%%%%%%%%-=@@@@@%%%##:     +%@@@@@%%%%+ =%%@@@@@@%%   -@@@@@    %@@@@@@@@%#.   .-*%%#**#%@@@%##*--:    
+   =@@@%###@@@@-@@@@@@@@@@:=@@@@@@@@@@@+    *@@@@@@%@@@@+*@@@@@@@@@@   #@@@@@=   @@@@@@@@@@@@: -#@@@@@@@@@@@@@@@@#      
+   +@@@#+++@@@@-@@@#         #@%@# %@@@#      %@@@+ @@@@**@@@=        .@@@@@@%    .@@@@::@@@@: *@@@@@@@@@@@@@@@@@*      
+   +@@@@@@@@@@@+@@@%         #@@@= %@@@*      #@@@+ @@@@%*@@@=        +@@@@@@@:    @@@@: @@@@: +@@@@@*.:-==#@@@@@#      
+   +@@@*-@@@@:. @@@@@@@@%    *@@@= #@@@*      +@@@+ %@@@%*@@@#==+=    %@@@+@@@#    @@@@..@@@@- +@@@@@.      +@@@@@.     
+   +@@@* %@@@=  @@@@@@@@#    *@@@+ *@@@*      =@@@# #@@@%#@@@@@@@%   .@@@@ +@@@.   @@@@.:@@@@- =@@@@@.      -@@@@@.     
+   =@@@% +@@@%  @@@@.        *@@@= *@@@*      +@@@# *@@@##@@@+--::   =@@@%=+@@@+  .@@@@..@@@@- =@@@@@+      #@@@@@-     
+   =@@@@  @@@@- @@@@         *@@@= =@@@*      #@@@* #@@@##@@@-       *@@@@@@@@@%  .@@@@  %@@@- =@@@@@+     .@@@@@@#     
+   -@@@@  +@@@% %@@@######+-*@@@@#=%@@@#    -#@@@@%*@@@@##@@@#****** @@@%+++#@@@:**@%@@**@@@@- -#*:  :     -@@@@@@%     
+   -@@@#   @@@@:#@@@@@@@@@#*@@@@@@%@@@%:    -@@@@@@@@@@%=#@@@@@@@@@@.@@@:    %@@+%@@@@@@@@@@=             +@@@@@@@+     
+    ::-:   :--. .-::::.....---=-------      .==-------:  :=---------.=--     :+=:======++==:            +@@@@@@@=       
+   =%%%@@@@%.@@@@@@@+@@@@@@@%.*@@@@%@%:%%*   =%@*#@@@@@@%=@@@@@@@@@*#%%%%%*%%%%%@%-@@@=  %@@=.       .+@@@@@@@+         
+   +@@*=-%@@:@@#+===:+%@@*+@@*#@@*++++:@@@# =@@@*#@@##@@@=+++@@@*++-+%@@*++@@++%@@-@@@@= @@@*:     .+@@@@@@@=.          
+   =@@@@@@@@-@@=      *@@-:@@##@@.    :@@@@%@@@@*#@@##@@@+   @@@:    *@@  *@@  +@@=@@@@@-@@@#:   .*@@@@@@@+             
+   +@@+*@@= :@@#===   *@@:-@@##@@%%#+ :@@@@@@@@@=%@@%+++=:   @@@:    #@@  #@@. +@@+@@@@@@@@@%  :*@@@@@@@#.              
+   +@@+:@@# -@@@###   #@@:=@@#*@@*++= -@@%*@@+@@-#@@*        @@@.    #@%  #@@: =@@*@@@+@@@@@# =@@@@@@@@@###**######*    
+   =@@* %@@:-@@+      #@@:=@@#*@@     -@@# =:-@@=%@@*        @@@.    %@%  *@@: =@@*@@@:-@@@@* *@@@@@@@@@@@%@@@@@@@@+    
+   -@@* -@@*-@@%####-%@@@%%@@**@@%####+@@*   =@@-%@@=        @@@    #@@@%++@@*@@@@=@@@: =@@@+ +@@@@@@@@@@@@@@@@@@@@:    
+   :**-  +##:####**#-*******= -*******-++-   -**.###=        %%@    *****+:++=+++*:+**.  =**- .*#***====++++++====:     
+"""
+
+
+#stores the town names, descriptions, and whether or not the mission for that town has been completed
 towns = {"Valentine" : ["""
 A rough, raucous, hard-working town that provides livestock at auction to Heartlands landowners,
 and rest and refreshment to thirsty cowboys.It's nicknamed 'Mudtown' because the streets, 
 buildings, and most of the residents are rarely clean.
-    """], "Strawberry" : ["""
+    """, False], "Strawberry" : ["""
 Until recently, this mountain town was little more than a base camp for lumberjacks and hunters,
 but more settlers and visitors have arrived as the local logging industry continues to grow.
 A small, isolated community of honest working folk.
-    """], "Saint Denis." : ["""
+    """, False], "Saint Denis." : ["""
 A lively, 200-year-old melting-pot city where industry magnates,
 socialites, traders, sailors, workers, beggars, and thieves all live side by side.
 With good rail, road, and river connections for sugar, cotton, and other commodities trading,
 and a new electric power plant, business is booming.
-    """], "Rhoades" : ["""
+    """, False], "Rhoades" : ["""
 A prim and proper Southern town on the surface,
 but many residents can't forget the Civil War or the town's pre-war glory days,
 where the horrific oppression of the slave trade made white landowners rich.
 Racial tensions, corruption, and old family feuds run deep.
-    """], "Annesburg" : ["""
+    """, False], "Annesburg" : ["""
 A mining town established by German settlers who discovered the rich coal seams in the surrounding hills.
 The surrounding countryside and waterways are sooty and polluted from the
 mining operations which have been running for almost a century
-    """], "Open road" : ["""
-Explore the open road of America. 
-From the Grizzly mountains of Ambarino to the southern plantations of Lemoyne
-    """]}
+    """, False]}
 
 tuberculosis_stage = 0
 Arthur_morgan_hp = 150 - (tuberculosis_stage * 10)
 towns_num = list(range(len(towns)))
-money = 0
+money = 500
 missions_completed = 0
 #costant variables:
 YEAR = 1899
@@ -80,43 +102,45 @@ def entertown():
    while True:
        try:
             inpt = int(input("""
-            You are now on the open road, where do you want to go next?
-            0: Valentine
-            1: Strawberry
-            2: Saint Denis
-            3: Rhoades
-            4: Annesburg
-            5: Explore the open road
-            type answer here: """))
+You are now on the open road, where do you want to go next?
+0: Valentine
+1: Strawberry
+2: Saint Denis
+3: Rhoades
+4: Annesburg
+type answer here: """))
             if inpt not in towns_num:
                 print(towns[6]) #generates error
        except:
-            print("value must be an integer between 0 and 5")
+            print("value must be an integer between 0 and 4")
        else:
             break
    if inpt < 5:
        print("Welcome to", list(towns.keys())[inpt], towns[list(towns.keys())[inpt]][0] , "You walk into the center of the town.")
        while True:
            try:
-               inpm = int(input("""
-               The place where Dutch waiting for you is down the road the left,
-               and the gunsmith is down the road to the right. Where do you go:
-               1: go left and meet dutch (this will start the mission)
-               2: go right and visit the gunsmith
-               type answer here: """))
+               if towns[list(towns.keys())[inpt]][1] == True: #Checking if the mission for this town has already been done, and if so giving a different prompt for coninuities sake
+                   print("The mission for this Town already has been completed")
+                   inpm = int(input("""
+The gunsmith is down the road to the right. where do you go?
+1: exit the town
+2: go right and visit the gunsmith
+Type answer here: """))
+               else:
+                    inpm = int(input("""
+The place where Dutch waiting for you is down the road the left,
+and the gunsmith is down the road to the right. Where do you go:
+1: go left and meet dutch (this will start the mission)
+2: go right and visit the gunsmith
+type answer here: """))
 
                if inpm not in list(range(1, 3)):
-                   print("chung")
                    print(towns[6]) #generates error
 
            except:
-                print("chug")
                 print("value must be an integer between 1 and 2")
            else:
                 break
-   else:
-       #insert content about exploring the world
-       print("")
 
    return inpt, inpm
 
@@ -131,8 +155,9 @@ def combat(e):
     #this loop is the battle loop, this will repeat until either the player's or the enemy's hp is reduced to 0
     while hp > 0 or ehp > 0:
 
-        print("You have ", hp, "health")
-        print("Enemy:", e)
+        print("You have", hp, "health")
+        print("Enemy:", e, "they have", ehp, "health")
+
         #for loop which will iterate through inventory list and print every item and its stats
         print("Your Inventory:")
         for c, i in enumerate(inventory):
@@ -141,7 +166,7 @@ def combat(e):
         while True:
             try:
                 player_input = input("What weapon do you want to use? ")
-                weapon = int(list(player_input))
+                weapon = inventory[int(player_input)]
                 print("You have selected: ", weapon)
             except:
                 if player_input == "debug":
@@ -171,7 +196,10 @@ def combat(e):
         battle_num = random.randint(0, 9)
         battle_string = "PRESS THE BUTTON " + str(battle_num) + " ON YOUR KEYBOARD WITHIN %d SECONDS TO FIRE \n"
         timeout = ITEMS[weapon]["aim time"]
-        t = Timer(timeout, print, ["Times Up, you got hit, press enter to reload the gun and fire again"])
+        t = Timer(timeout, print, ["""
+        
+        Times Up, you got hit, press enter to reload the gun and fire again
+        """])
         t.start()
         prompt = battle_string % timeout
         answer = input(prompt)
@@ -203,7 +231,7 @@ def combat(e):
             print("You died, the game will now restart")
             break
         elif ehp <= 0:
-            print("You defeated ", e)
+            print("You defeated", e)
             break
         else:
             # reloading mechanic, the reload speed of the weapon will affect the amount of chances that the
@@ -219,7 +247,7 @@ def combat(e):
                     if random.randint(1, 10) <= ENEMIES[e]["aim skill"]:
                         damage_taken += ENEMIES[e]["dmg"]
                 hp -= damage_taken
-                print("You took ", damage_taken, "damage while reloading")
+                print("You took", damage_taken, "damage while reloading")
 
 
 
@@ -237,7 +265,7 @@ def missions(t):
     global towns_num
     global money
     global missions_completed
-
+    global towns
 #prints the mission "story" variable
     print(list(missions_t.keys())[t])
 #starts a battle with enemy by calling combat function
@@ -253,7 +281,8 @@ you where he is waiting for you in the next town.
     """)
     money += 100
     missions_completed += 1
-    tuberculosis_stage += 1
+    tuberculosis_stage += 1 #tuberculosis stage increases with each mission and therefore arthurs health will go down after each mission
+    towns[list(towns.keys())[inpt]][1] = True #sets the mission to completed
 
 #gunsmith function lets player purchase new weapons
 def gunsmith(t):
@@ -270,39 +299,56 @@ def gunsmith(t):
         while True:
             try:
                 item_choice = int(input("What item do you want to purchase "))
-                item_choice_name = ITEMS.keys()[item_choice]
+                item_choice_name = list(ITEMS.keys())[item_choice]
             except:
                 print("please input an integer corresponding to an item in the catalouge")
                 continue
-            double_check = input("are you sure you want to purchase this item, press 0 for no, any other input will count as yes")
+            double_check = input("are you sure you want to purchase this item, press 0 for no, any other input will count as yes ")
             if double_check == "0":
                 continue
             else:
                 break
 
         #checks if player has enough money to purchase item
-        if money - ITEMS[item_choice_name["price"]] < 0:
+        if money - ITEMS[item_choice_name]["price"] < 0:
             print("you do not have enough money to purchase this item")
         else:
-            money -= ITEMS[item_choice_name["price"]]
+            money -= ITEMS[item_choice_name]["price"]
             inventory.append(item_choice_name)
-
+            print("You are now the proud owner of a", item_choice_name)
+            print("Here is your inventory now:", inventory)
+            print("here is how much money you have now:", money)
         leave_gunsmith = input("press 0 to leave the gunsmith, any other input will return you to the catalouge.")
         if leave_gunsmith == "0":
             break
         else:
             continue
 
-#main routine 
+#main routine
+
+#here the equivalent of the starting "cutscene" will play
+print(logo)
+print("""
+You are arthur morgan, the year is 1899, and you a member of the Vander-linde gang.
+The gang is named after Dutch Vander-Linde, who founded the gang along with Hosea Mathews.
+You and the rest of your gang are on the run from the Pinkerton Detective Agency, which 
+was hired by Leviticus Cornwall to hunt you down after you robbed a train of his.
+You leave the camp that the gang is staying at, you find a letter in your tent from Dutch
+telling you where he is waiting for you.
+""")
+time.sleep(5)
+
+#start of the main main routine. this is the main loop for the gameplay of the game.
 while True:
 
-    #here the equivalent of the starting "cutscene" will play
+    Arthur_morgan_hp = 150 - (tuberculosis_stage * 10)
 
     town_selection = entertown()
     tc = town_selection[0] #stands for town choice
-    mve = town_selection[1] #variable stores the users choice of starting the mission or exploring the town. Mission Vs Explore hence the name, mve
-    if mve == 1:
+    mvg = town_selection[1] #variable stores the users choice of starting the mission or visiting the gunsmith. Mission Vs Gunsmith hence the name, mvg
+    if list(towns.values())[tc][1] == True and mvg == 1:
+        print("You turn around and walk away from the town")
+    elif mvg == 1:
         missions(tc)
-    elif mve == 2:
+    elif mvg == 2:
         gunsmith(list(towns.keys())[tc])
-
