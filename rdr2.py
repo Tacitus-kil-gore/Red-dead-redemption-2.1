@@ -151,11 +151,15 @@ insert final mission
     2: Saint Denis
     3: Rhoades
     4: Annesburg
+    9999: Restart the game
     type answer here: """))
                 if inpt not in towns_num:
                     print(towns[6]) #generates error
            except:
-                print("value must be an integer between 0 and 4")
+               if inpt == 9999:
+                  return 9999
+               else:
+                  print("value must be an integer between 0 and 4")
            else:
                 break
        if inpt < 5:
@@ -188,6 +192,8 @@ type answer here: """))
                     print("value must be an integer between 1 and 2")
                else:
                     break
+
+
 
        return inpt, inpm
 
@@ -284,17 +290,21 @@ type answer here: """))
                 # reloading mechanic, the reload speed of the weapon will affect the amount of chances that the
                 # enemy has to hit the player.
                 print("reloading...")
-                time.sleep(ITEMS[weapon]["reload speed"])
                 if player_inputted == False:
                     hp -= ENEMIES[e]["dmg"]
+                    time.sleep(ITEMS[weapon]["reload speed"])
                     print(e, "hit you for", ENEMIES[e]["dmg"], "damage while you were reloading")
                 else:
                     damage_taken = 0
-                    for i in range(0, ITEMS[weapon]["reload speed"]):
+                    for i in range(0, ITEMS[weapon]["reload speed"]): #for loop that determines how much damage you will get hit for while reloading, for every one second of reload time the for loop will iterate, and the enemy will have a chance of hitting you based on their "aim skill"
+                        time.sleep(1)
                         if random.randint(1, 10) <= ENEMIES[e]["aim skill"]:
                             damage_taken += ENEMIES[e]["dmg"]
+                            print("You got hit!")
+                        else:
+                            print("The enemy missed!")
                     hp -= damage_taken
-                    print("You took", damage_taken, "damage while reloading")
+                    print("You took", damage_taken, "damage total while reloading")
 
 
 
@@ -340,7 +350,8 @@ you where he is waiting for you in the next town.
         global money
         while True:
 
-            print("Welcome to the", t, "firearms smithery. You have", money, "dollars. Here is our catalouge:")
+            print("Welcome to the firearms smithery of", t, "You have", money, "dollars. Here is our catalouge:")
+
             #for loop iterates through all items in the game and prints their name, stats, and key that the player had to press to select them.
             for c, i in enumerate(ITEMS):
                 print(i, ITEMS[i], "press", c, "select this item")
@@ -348,11 +359,15 @@ you where he is waiting for you in the next town.
             #loop protects against errors and missclicks
             while True:
                 try:
-                    item_choice = int(input("What item do you want to purchase "))
+                    item_choice = int(input("What item do you want to purchase?, type '9999' to leave the store and return to the open road. "))
                     item_choice_name = list(ITEMS.keys())[item_choice]
                 except:
-                    print("please input an integer corresponding to an item in the catalouge")
-                    continue
+                    if item_choice == 9999:
+                        print("You turn around and walk out of the store and out of the town")
+                        return
+                    else:
+                        print("please input an integer corresponding to an item in the catalouge")
+                        continue
                 double_check = input("are you sure you want to purchase this item, press 0 for no, any other input will count as yes ")
                 if double_check == "0":
                     continue
@@ -402,8 +417,21 @@ The gang is named after Dutch Vander-Linde, who founded the gang along with Hose
 You and the rest of your gang are on the run from the Pinkerton Detective Agency, which 
 was hired by Leviticus Cornwall to hunt you down after you robbed a train of his.
 You leave the camp that the gang is staying at, you find a letter in your tent from Dutch
-telling you where he is waiting for you.
+telling you where he is waiting for you. You have also recently caught tuberculosis, and are 
+slowly dying, this is why your starting health will go down by 10 after every mission.
 (This game is meant to follow the rough story of RDR2)
+How to play:
+the numbers on your keyboard will be used as inputs.
+eg:
+ 0 : Cookie
+ 1 : Milk
+ in this situation you would press 0 to choose "cookie" and 1 to choose "milk"
+ During combat you will have to "quickdraw". To do this the game will tell you 
+ to input a number in a certian amount of time in order to fire. If you "miss" or 
+ dont fire in time, then the enemy will hit you for a certian amount of damage. You
+ will then have to reload your gun.(you will have to reload even if you hit the enemy)
+ While reloading, the enemy will have a certian number of chances to hit you. This 
+ number of chances is based on the "reload time of your gun"
     """)
     time.sleep(5)
 
@@ -419,6 +447,9 @@ telling you where he is waiting for you.
             break #breaks out of the main routine loop and restarts the master loop, restarting the game
 
         town_selection = entertown()
+        if town_selection == 9999:
+            print("Game Restarting")
+            break
         tc = town_selection[0] #stands for town choice
         mvg = town_selection[1] #variable stores the users choice of starting the mission or visiting the gunsmith. Mission Vs Gunsmith hence the name, mvg
         if mvg == 0:
