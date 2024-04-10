@@ -71,7 +71,7 @@ mining operations which have been running for almost a century
     Arthur_morgan_hp = 150 - (tuberculosis_stage * 10)
     towns_num = list(range(len(towns)))
     money = 0
-    missions_completed = 0
+    missions_completed = 3
     all_missions_completed = False
     #costant variables:
     YEAR = 1899
@@ -198,22 +198,23 @@ type answer here: """))
        return inpt, inpm
 
 
-
-    #this function will be where arthur fights enemies.
-    def combat(e):
+    #This is a function, it can be called at any time by typing combat(). Inside of the brackets you place the argument, the argument in this case is e. e is explained in a later comment
+    #this function will be where arthur fights enemies. It will return a True if the player kills the enemies, it will return false if the player loses the battle
+    def combat(e): #e is the name of the enemy that will be used in this funtion. This name is the key for the ENEMIES hash. For example, e could be "the pinkerton".
         hp = Arthur_morgan_hp #stands for health points
         ehp = ENEMIES[e]["hp"] #stands for enemy health points
         debug = False
 
-        #this loop is the battle loop, this will repeat until either the player's or the enemy's hp is reduced to 0
+        #this is a while loop, it will repeat the code inside of it until its parameters are broken, in this example
+        #the loop will repeat until either the player's or the enemy's hp is reduced to 0
         while hp > 0 or ehp > 0:
 
             print("You have", hp, "health")
             print("Your enemy is", e, "and they have", ehp, "health")
 
-            #for loop which will iterate through inventory list and print every item and its stats
+            #This is a for loop, if will iterate through the variable inventory. This loop will iterate through inventory list and print every item and its stats
             print("Your Inventory:")
-            for c, i in enumerate(inventory):
+            for c, i in enumerate(inventory): #enumerate allows me to add a counter for each item in a for loop
                 print(inventory[c], ": ", ITEMS[i], "Type", c, "to select this weapon")
             #asks the user to select a weapon for the upcoming battle
             while True:
@@ -246,12 +247,14 @@ type answer here: """))
 
             #battle sequence will start, a random number will be chosen and the user will have to press that number on their
             #keyboard fast enough in order to fire, simulating quickdraw.
+            #this uses threading in order to place a time limit on the users input, if the user does not input something in time, then it will print "Times Up, you got hit, press enter to reload the gun and fire again"
             battle_num = random.randint(0, 9)
             battle_string = "PRESS THE BUTTON " + str(battle_num) + " ON YOUR KEYBOARD WITHIN %d SECONDS TO FIRE \n"
             timeout = ITEMS[weapon]["aim time"]
             t = Timer(timeout, print, ["""
             
-            Times Up, you got hit, press enter to reload the gun and fire again
+Times Up, you got hit, press enter to reload the gun and fire again
+            
             """])
             t.start()
             prompt = battle_string % timeout
@@ -296,7 +299,8 @@ type answer here: """))
                     print(e, "hit you for", ENEMIES[e]["dmg"], "damage while you were reloading")
                 else:
                     damage_taken = 0
-                    for i in range(0, ITEMS[weapon]["reload speed"]): #for loop that determines how much damage you will get hit for while reloading, for every one second of reload time the for loop will iterate, and the enemy will have a chance of hitting you based on their "aim skill"
+                    for i in range(0, ITEMS[weapon]["reload speed"]): #for loop that determines how much damage you will get hit for while
+                        # reloading, for every one second of reload time the for loop will iterate, and the enemy will have a chance of hitting you based on their "aim skill"
                         time.sleep(1)
                         if random.randint(1, 10) <= ENEMIES[e]["aim skill"]:
                             damage_taken += ENEMIES[e]["dmg"]
@@ -305,8 +309,6 @@ type answer here: """))
                             print("The enemy missed!")
                     hp -= damage_taken
                     print("You took", damage_taken, "damage total while reloading")
-
-
 
 
 
@@ -396,16 +398,18 @@ you where he is waiting for you in the next town.
         while True:
             print(list(missions_t.keys())[5]) #prints the "cutscene" string
 
-            combat(list(ENEMIES.keys())[list(missions_t.values())[5]]) #starts the fight with micah
+            player_victory = combat(list(ENEMIES.keys())[list(missions_t.values())[5]])
 
-            #prints the ending "cutscene"
-            print("""
+            if player_victory == True: #starts the fight with micah
+                #prints the ending "cutscene"
+                print("""
             
-    insert end cutscene
+insert end cutscene
             
-            """)
-
-
+                """)
+                break
+            elif player_victory == False: #if the player loses the final battle they will restart the battle
+                continue
 
     #main routine
 
@@ -442,8 +446,9 @@ eg:
         Arthur_morgan_hp = 150 - (tuberculosis_stage * 10)
 
         # checks if every main mission has been completed
-        if missions_completed == 5:
+        if missions_completed >= 5:
             final_mission()
+            print("chung")
             break #breaks out of the main routine loop and restarts the master loop, restarting the game
 
         town_selection = entertown()
