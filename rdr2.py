@@ -4,7 +4,7 @@ import random
 import time
 from threading import Timer
 
-#master loop, this loop will never be broken and will redefine all variables effectively fully restarting the game, this could also be called the restart loop.
+#master loop, this loop will never be broken and will redefine all variables once it loops, effectively fully restarting the game, this could also be called the restart loop.
 while True:
     #starting variables and constants:
 
@@ -29,6 +29,9 @@ while True:
        =@@* %@@:-@@+      #@@:=@@#*@@     -@@# =:-@@=%@@*        @@@.    %@%  *@@: =@@*@@@:-@@@@* *@@@@@@@@@@@%@@@@@@@@+    
        -@@* -@@*-@@%####-%@@@%%@@**@@%####+@@*   =@@-%@@=        @@@    #@@@%++@@*@@@@=@@@: =@@@+ +@@@@@@@@@@@@@@@@@@@@:    
        :**-  +##:####**#-*******= -*******-++-   -**.###=        %%@    *****+:++=+++*:+**.  =**- .*#***====++++++====:     
+       
+                                                (ultra low graphics)
+        
     """
 
 
@@ -71,7 +74,7 @@ mining operations which have been running for almost a century
     Arthur_morgan_hp = 150 - (tuberculosis_stage * 10)
     towns_num = list(range(len(towns)))
     money = 0
-    missions_completed = 3
+    missions_completed = 0
     all_missions_completed = False
     #costant variables:
     YEAR = 1899
@@ -95,23 +98,45 @@ you find a pinkerton in the alley with his hand on his gunholster staring at you
     
     """ : 0, """
     
-insert strawwberry mission
+You find Dutch waiting on a cliff overlooking the town, he points to a jail and says "Thats where Micah is, you need to rescue him"
+You cough and then reply "Id rather let the bastard rot". "You're losing faith in me arthur, we need Micah to go to tahiti"
+dutch explains. You begrudgingly reply "oh all right just for you" You sneak down to the jail and blow it open with dynamite. 
+"Good to see you black lung how have you been" Micah says. You tell him to hurry up and both of you run out of the jail. Micah says he 
+needs to go find his guns and he will meet you back at camp, as you watch Micah run off, a Lawman shouts: "Put Your hands UP, NOW"
     
     """ : 1, """
     
-insert saint denis mission
+You find dutch waiting with most of the gang outiside the Lemoyne County Bank. Dutch tells you the plan. "We are going to rob this bank,
+and finnally have enough money to go to tahiti, Hosea is going to distract the lawmen, and we are going to break into the vault"
+You and the gang put your mask on and barge inside, taking all the money from the vault. Suddenly you hear a BOOM, as the door blows
+ open and Mr. Milton, a pinkerton demands that you come outside, or the mass amount of pinkertons 
+and lawmen outside will open fire" He then brings out a bruised and handcuffed Hosea, who had been captured. Milton says, "Final chance
+Dutch Vander-linde". After no response he shoots hosea. Dutch Tells everyone to climb onto the roof, however the ladder breaks, leaving you
+and lenny in an alleyway, eventually you find a way onto the rooftops of the city, but the rest of the gang is gone. You hear a gunshot and 
+turn around, lenny is dead and there is a lawman facing you.
     
-    """ : 0, """
+    """ : 1, """
     
-insert rhoades mission
+You find dutch waiting just outside the Braithwaite Manor, owned by the Braithwaites, a rich plantation family. He tells you that little 8 year old
+jack marston has been kidnapped by the braithwaites and you need to get him back. You and the gang walk through the open plantations, and 
+Dutch yells "Get down her now! You inbred Trash!", You and the gang search the house and Dutch finds jack, dutch says that him and the rest of 
+the gang will take jack home, and you need to set the dynamite in order to blow up the Braithwaite manor. You set the charges and explode them
+the Manor collapses in flames. As you are leaving you find a Braithwaite gaurd, who is pointing his gun at you.
     
     """ : 2, """
     
-insert annesburg mission
+You find dutch waiting for you outside of the mines, saying that he has a job for you. He wants you and John Marston to blow up Bacchus Bridge, in 
+order to create a diversion for a plan of his. Once you and john set the dynamite, and barely dodge a train, John says that he will meet you back at camp, 
+he has to go talk to little jack, his son. You blow the bridge up and as you are walking away, a lawman confronts you.
     
     """ : 1, """
     
-insert final mission
+You escape and find 100 dollars on the corpse of your adversary. As you return to camp you find standoff. John is calling Micah a rat, and that Micah is
+why the bank robbery went south, and how the pinkertons knew that you and dutch were in valentine. John is saying that Micah told the Pinkertons. John and Micah
+are both pointing guns at each other. You side with John and Dutch sides with Micah. Dutch says "Who Amongst You Is With Me, And Who Is Betraying Me?", while pointing
+his guns at you and John. BANG, the pinkertons have found camp, You and John run away to your horses and the rest of the gang who is with dutch gets on theirs, 
+they chase after you and eventually you make it to the top of a hill. John says that he needs to go to his family, and you reply that you will hold the gang off
+You shoot pinkertons and lawmen, but Micah jumps out behind you. (this final battle is designed to be hard)
     
     """ : 3}
 
@@ -119,20 +144,21 @@ insert final mission
     #thesem are all of the items in the game, dmg stands for the damage they do, reload speed is
     #the time it takes to reload, aim time is how easy it is to aim, higher is easier, and price is how much it will cost the player to purchase.
     ITEMS = {
-    "cattleman_revolver" : {"dmg" : 20, "reload speed": 1, "aim time" : 3, "price" : 100},
-    "springfield_rifle" : {"dmg" : 100, "reload speed" : 5, "aim time" : 1, "price" : 300 },
-    "m1911" : {"dmg" : 40, "reload speed" : 1, "aim time": 3, "price" : 150}
+    "Cattleman Revolver" : {"dmg" : 20, "reload speed": 1, "aim time" : 3, "price" : 100},
+    "Springfield Rifle" : {"dmg" : 100, "reload speed" : 5, "aim time" : 1.5, "price" : 300 },
+    "Colt M1911 Pistol" : {"dmg" : 40, "reload speed" : 1, "aim time": 3, "price" : 150},
+    "Lancster Repeater": {"dmg": 60, "reload speed": 3, "aim time": 2, "price": 200}
     }
 
     #dictionary for the enemies, hp is the amount of health points they have, dmg is the
     #amount of damage they do per hit and aim skill is the chance out of 10 of hitting you
     ENEMIES ={
-    "the pinkerton" : {"hp" : 100, "dmg" : 20, "aim skill" : 4},
+    "the pinkerton" : {"hp" : 100, "dmg" : 0, "aim skill" : 5},
     "the lawman" : {"hp" : 100, "dmg" : 30, "aim skill" : 6},
     "the braithwaite" : {"hp" : 100, "dmg" : 20, "aim skill" : 7},
-    "micah" : {"hp" : 200, "dmg": 70, "aim skill" : 9}}
+    "micah" : {"hp" : 200, "dmg": 19, "aim skill" : 8}}
 
-    inventory = ["cattleman_revolver"]
+    inventory = ["Cattleman Revolver"] #inventory will start off with cattleman revolver only
 
 
 
@@ -198,9 +224,9 @@ type answer here: """))
        return inpt, inpm
 
 
-    #This is a function, it can be called at any time by typing combat(). Inside of the brackets you place the argument, the argument in this case is e. e is explained in a later comment
-    #this function will be where arthur fights enemies. It will return a True if the player kills the enemies, it will return false if the player loses the battle
-    def combat(e): #e is the name of the enemy that will be used in this funtion. This name is the key for the ENEMIES hash. For example, e could be "the pinkerton".
+    #This is a function, it can be called at any time by typing combat(). Inside of the brackets you place the argument, this a variable which is will be used in the function. the argument in this case is named e. e is explained in a later comment
+    #this particular function will be where arthur fights enemies. It will return a True if the player kills the enemies, it will return false if the player loses the battle
+    def combat(e): #e a string which holds the name of the enemy that will be used in this funtion. This name is the key for the ENEMIES hash. For example, e could be "the pinkerton". This lets the function acess the values assinged to "the pinkerton"
         hp = Arthur_morgan_hp #stands for health points
         ehp = ENEMIES[e]["hp"] #stands for enemy health points
         debug = False
@@ -253,7 +279,8 @@ type answer here: """))
             timeout = ITEMS[weapon]["aim time"]
             t = Timer(timeout, print, ["""
             
-Times Up, you got hit, press enter to reload the gun and fire again
+Times Up!
+Press enter to reload the gun and fire again
             
             """])
             t.start()
@@ -261,7 +288,7 @@ Times Up, you got hit, press enter to reload the gun and fire again
             answer = input(prompt)
             t.cancel()
 
-            # tests to see if the player entered a value, and if so the value was correct.
+            # tests to see if the player entered a value, and if so was the value was correct?
             while True:
                 try:
                     if answer == '':
@@ -274,19 +301,13 @@ Times Up, you got hit, press enter to reload the gun and fire again
                     else:
                         player_inputted = True
                         print("You missed the enemy")
-                        print("They hit you for", ENEMIES[e]["dmg"], "damage")
-                        hp -= ENEMIES[e]["dmg"]
-                        print("You now have ", hp, "health left")
                 except:
                     print("Please enter an integer")
                 else:
                     break
 
-            #checks whether player has killed the enemy or died
-            if hp <= 0:
-                print("You died, the game will now restart")
-                return False
-            elif ehp <= 0:
+            #checks whether player has killed the enemy, if not then the player will reload
+            if ehp <= 0:
                 print("You defeated", e)
                 return True
             else:
@@ -300,7 +321,8 @@ Times Up, you got hit, press enter to reload the gun and fire again
                 else:
                     damage_taken = 0
                     for i in range(0, ITEMS[weapon]["reload speed"]): #for loop that determines how much damage you will get hit for while
-                        # reloading, for every one second of reload time the for loop will iterate, and the enemy will have a chance of hitting you based on their "aim skill"
+                                                                    #reloading, for every one second of reload time the for loop will iterate,
+                                                                    #and the enemy will have a chance of hitting you based on their "aim skill"
                         time.sleep(1)
                         if random.randint(1, 10) <= ENEMIES[e]["aim skill"]:
                             damage_taken += ENEMIES[e]["dmg"]
@@ -309,7 +331,11 @@ Times Up, you got hit, press enter to reload the gun and fire again
                             print("The enemy missed!")
                     hp -= damage_taken
                     print("You took", damage_taken, "damage total while reloading")
-
+            if hp <= 0:
+                print("You died, the game will now restart") #checks if the player died
+                return False
+            else:
+                continue
 
 
 
@@ -328,24 +354,33 @@ Times Up, you got hit, press enter to reload the gun and fire again
     #prints the mission "cutscene" variable
         print(list(missions_t.keys())[t])
     #starts a battle with enemy by calling combat function
-        if combat(list(ENEMIES.keys())[list(missions_t.values())[t]]) == True:
+        if combat(list(ENEMIES.keys())[list(missions_t.values())[t]]) == True: #if the player wins then the combat function returns true
+            missions_completed += 1
+            if missions_completed >= 5:
+                return True #if you have completed all missions then it will immediatly push you to the final mission
+            else:
 
-            print("""
-        
+                print("""
+            
 You escape and make it back to camp,
 finding 100 dollars on the corpse of""", list(ENEMIES.keys())[list(missions_t.values())[0]], """
 as you leave the town. You find a note 
 in your tent where dutch tells 
 you where he is waiting for you in the next town.
-    
-            """)
+        
+                """)
 
-            money += 100
-            missions_completed += 1
-            tuberculosis_stage += 1 #tuberculosis stage increases with each mission and therefore arthurs health will go down after each mission
-            towns[list(towns.keys())[t]][1] = True #sets the mission to completed
+                money += 150
+                tuberculosis_stage += 1 #tuberculosis stage increases with each mission and therefore arthurs health will go down after each mission
+                towns[list(towns.keys())[t]][1] = True #sets the mission to completed
+                return True
         else:
-            return False
+            return False #if player loses battle then this triggers the game to restart
+
+
+
+
+
     #gunsmith function lets player purchase new weapons
     def gunsmith(t):
         global inventory
@@ -404,7 +439,11 @@ you where he is waiting for you in the next town.
                 #prints the ending "cutscene"
                 print("""
             
-insert end cutscene
+Dutch arrives and looks over the scene, both you and micah barely alive, laying on the floor. Dutch doesnt say a word as he turns around and walks away. Micah slowly
+gets up and hobbles away too. You can barely breathe, but muster the strength to crawl over to the clif face and watch the sun set, you are finnally at rest.
+
+
+You Beat RDR2! The game will now restart
             
                 """)
                 break
@@ -423,7 +462,8 @@ was hired by Leviticus Cornwall to hunt you down after you robbed a train of his
 You leave the camp that the gang is staying at, you find a letter in your tent from Dutch
 telling you where he is waiting for you. You have also recently caught tuberculosis, and are 
 slowly dying, this is why your starting health will go down by 10 after every mission.
-(This game is meant to follow the rough story of RDR2)
+(This game is meant to roughly follow the story of RDR2. You can play the missions in any order
+but ideally the missions are meant to be played in chronological order.)
 How to play:
 the numbers on your keyboard will be used as inputs.
 eg:
@@ -448,12 +488,12 @@ eg:
         # checks if every main mission has been completed
         if missions_completed >= 5:
             final_mission()
-            print("chung")
             break #breaks out of the main routine loop and restarts the master loop, restarting the game
 
         town_selection = entertown()
         if town_selection == 9999:
             print("Game Restarting")
+            time.sleep(2)
             break
         tc = town_selection[0] #stands for town choice
         mvg = town_selection[1] #variable stores the users choice of starting the mission or visiting the gunsmith. Mission Vs Gunsmith hence the name, mvg
@@ -461,6 +501,8 @@ eg:
             print("You turn around and walk away from the town")
         elif mvg == 1:
             if missions(tc) == False: #if the player dies then the game is restarting
+                print("Game Restarting")
+                time.sleep(2)
                 break
             else:
                 continue
@@ -469,7 +511,7 @@ eg:
 
 
 
-
+time.sleep(2)#delays the game restart speed.
 
 
 
